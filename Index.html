@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Official Leads Guru</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 25px 15px;
+    }
+
+    .hero {
+      background: white;
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: 30px;
+      margin: 10px 0;
+    }
+
+    p {
+      font-size: 17px;
+      line-height: 1.6;
+      color: #4b5563;
+    }
+
+    .video-box {
+      margin-top: 25px;
+      background: #111827;
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      display: block;
+    }
+
+    .notice {
+      margin-top: 18px;
+      padding: 15px;
+      background: #eef2ff;
+      border-radius: 12px;
+      font-size: 15px;
+    }
+
+    .button {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 15px 30px;
+      background: #16a34a;
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="hero">
+
+      <div class="logo">
+        Official Leads Guru
+      </div>
+
+      <h1>
+        यह वीडियो अंत तक जरूर देखें
+      </h1>
+
+      <p>
+        इस वीडियो में आपके लिए महत्वपूर्ण जानकारी दी गई है।
+        कृपया वीडियो को ध्यान से पूरा देखें।
+      </p>
+
+      <div class="video-box">
+        <video id="myVideo" controls playsinline>
+          <source src="video.mp4" type="video/mp4">
+          आपका browser video support नहीं करता।
+        </video>
+      </div>
+
+      <div class="notice" id="message">
+        वीडियो पूरा देखने के बाद नीचे दिया गया बटन दिखाई देगा।
+      </div>
+
+      <a
+        id="continueButton"
+        class="button disabled"
+        href="#"
+      >
+        आगे बढ़ें
+      </a>
+
+    </div>
+
+    <div class="footer">
+      © 2026 Official Leads Guru
+    </div>
+
+  </div>
+
+  <script>
+
+    const video = document.getElementById("myVideo");
+    const button = document.getElementById("continueButton");
+    const message = document.getElementById("message");
+
+    let lastTime = 0;
+
+    video.addEventListener("timeupdate", function () {
+      if (!video.seeking) {
+        lastTime = video.currentTime;
+      }
+    });
+
+    video.addEventListener("seeking", function () {
+
+      if (video.currentTime > lastTime + 1) {
+        video.currentTime = lastTime;
+      }
+
+    });
+
+    video.addEventListener("ended", function () {
+
+      message.innerHTML =
+        "बहुत अच्छा! आपने वीडियो पूरा देख लिया है। अब आगे बढ़ें।";
+
+      button.classList.remove("disabled");
+
+      button.href = "#";
+
+    });
+
+  </script>
+
+</body>
+</html>
