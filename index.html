@@ -1,86 +1,27 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Official Leads Guru</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f7fb;
-            color: #111827;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .hero h1 {
-            color: #1a202c;
-            margin-bottom: 10px;
-        }
-        .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-            height: 0;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-    </style>
+<title>Protected Video Player</title>
 </head>
 <body>
-    <div class="container">
-        <div class="hero">
-            <h1>Official Leads Guru</h1>
-            <p>यह वीडियो अंत तक ज़रूर देखें।</p>
-        </div>
-        <div class="video-wrapper">
-            <div id="player"></div>
-        </div>
-    </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script>
-        var player;
-        var lastPlayedTime = 0;
+<video id="myVideo" width="640" height="390" controls>
+  <source src="https://drive.google.com/uc?export=view&id=1cBKeszOa8y4haksVxofbU_pBH5jK9iMs" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '390',
-                width: '640',
-                videoId: '3kll7WQ7org',playerVars: { 'controls': 0,'disablekb': 1, 'modestbranding': 1 }, // यहाँ अपनी वीडियो आईडी डालें
-                events: {
-                    'onStateChange': onStateChange
-                }
-            });
-        }
+<script>
+var video = document.getElementById('myVideo');
+var maxTime = 0;
 
-        function onStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                setInterval(function() {
-                    var currentTime = player.getCurrentTime();
-                    // अगर समय आगे बढ़ता है, तो उसे lastPlayedTime पर वापस लाएं
-                    if (currentTime > lastPlayedTime + 1) {
-                        player.seekTo(lastPlayedTime, true);
-                    } else {
-                        lastPlayedTime = currentTime;
-                    }
-                }, 1000);
-            }
-        }
-    </script>
+video.addEventListener('timeupdate', function() {
+  if (video.currentTime > maxTime + 1) {
+    video.currentTime = maxTime;
+  } else if (video.currentTime > maxTime) {
+    maxTime = video.currentTime;
+  }
+});
+</script>
+
 </body>
 </html>
