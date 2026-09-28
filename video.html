@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Protected Video Player</title>
+</head>
+<body>
+
+<video id="myVideo" width="640" height="390" controls>
+  <source src="https://drive.google.com/uc?export=view&id=1cBKeszOa8y4haksVxofbU_pBH5jK9iMs" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<script>
+var video = document.getElementById('myVideo');
+var maxTime = 0;
+
+video.addEventListener('timeupdate', function() {
+  if (video.currentTime > maxTime + 1) {
+    video.currentTime = maxTime;
+  } else if (video.currentTime > maxTime) {
+    maxTime = video.currentTime;
+  }
+});
+</script>
+
+</body>
+</html>
