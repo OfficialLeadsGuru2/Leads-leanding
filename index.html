@@ -3,78 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inspirational Video Page</title>
+    <title>Digital Skills Mastery</title>
     <style>
-        body {
+        * {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #1e293b;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #ff007f, #ff5722, #ffeb3b, #4caf50, #00bcd4, #9c27b0);
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
-            text-align: center;
+            padding: 40px 20px;
         }
 
         .container {
-            width: 85%;
-            max-width: 750px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 30px;
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+            background: #ffffff;
+            padding: 40px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            background-color: #dbeafe;
+            color: #1e40af;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        h1 {
+            font-size: 40px;
+            color: #0f172a;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        p.subtitle {
+            font-size: 18px;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            margin: 0 auto 30px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 100%;
         }
 
         video {
             width: 100%;
-            border-radius: 15px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-            margin-bottom: 25px;
+            display: block;
+            background-color: #000;
         }
 
-        h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
-            font-weight: 700;
-            text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
-        }
-
-        p {
-            font-size: 1.3rem;
-            font-weight: 400;
-            margin-bottom: 20px;
-            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
-        }
-
-        .quote {
+        .motivational-text {
+            font-size: 16px;
+            color: #475569;
             font-style: italic;
-            color: #e0e0e0;
-            font-size: 1.1rem;
-            margin-top: 15px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 32px;
+            }
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <video controls>
-            <source src="https://archive.org/download/without-thinking-potential-with-digital-skills-leads-guru-2026_202026_281080P_HD.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+        <span class="badge">Success through knowledge</span>
+        <h1>Unlock Your Potential with Digital Skills</h1>
+        <p class="subtitle">Gain the high-paying skills demanded by the modern world.</p>
 
-        <h1>Learn high paying skills</h1>
-        <p>Let's start your work with us</p>
-
-        <div class="quote">
-            "Your limitation—it's only your imagination. Push harder than yesterday if you want a different tomorrow."
+        <div class="video-wrapper">
+            <video id="lockedVideo" controls>
+                <source src="https://archive.org/download/without-thinking-potential-with-digital-skills-leads-guru-2026_202026_281080P_HD.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
         </div>
+
+        <p class="motivational-text">"The limits of the future are defined by the skills you build today. Invest in yourself, create your opportunity."</p>
     </div>
+
+    <script>
+        const video = document.getElementById('lockedVideo');
+        let highestTime = 0;
+
+        video.addEventListener('timeupdate', () => {
+            if (video.currentTime > highestTime) {
+                highestTime = video.currentTime;
+            }
+        });
+
+        video.addEventListener('seeking', () => {
+            if (video.currentTime > highestTime) {
+                video.currentTime = highestTime;
+            }
+        });
+    </script>
 
 </body>
 </html>
