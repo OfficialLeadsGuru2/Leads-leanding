@@ -147,22 +147,21 @@
     const button = document.getElementById("continueButton");
     const message = document.getElementById("message");
 
-    let lastTime = 0;
+    var video = document.getElementById('myVideo');
+var lastPlayedTime = 0;
 
-    video.addEventListener("timeupdate", function () {
-      if (!video.seeking) {
-        lastTime = video.currentTime;
-      }
-    });
+video.addEventListener('timeupdate', function() {
+  if (!video.seeking) {
+    lastPlayedTime = video.currentTime;
+  }
+});
 
-    video.addEventListener("seeking", function () {
-
-      if (video.currentTime > lastTime + 1) {
-        video.currentTime = lastTime;
-      }
-
-    });
-
+video.addEventListener('seeking', function() {
+  if (video.currentTime > lastPlayedTime) {
+    video.currentTime = lastPlayedTime;
+  }
+});
+    
     video.addEventListener("ended", function () {
 
       message.innerHTML =
