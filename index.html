@@ -1,32 +1,35 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta <title>LeadsGuru Earning Potential</title>
- <style>
+  <meta charset="UTF-8">
+  <title>LeadsGuru Earning Potential</title>
+  <style>
     body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-image: url('ebef427a893f6cfea45b736b76175e26'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: white; text-align: center; }
     .container { background: rgba(0, 0, 0, 0.7); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); max-width: 600px; width: 90%; }
     video { width: 100%; border-radius: 15px; margin-bottom: 30px; outline: none; }
     h1 { font-size: 2rem; margin-bottom: 15px; line-height: 1.4; }
     p { font-size: 1.2rem; opacity: 0.9; }
- </style>
+  </style>
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-    const video = document.getElementById('promoVideo');
-    let maxTime = 0;
+      const video = document.getElementById('promoVideo');
+      let maxTime = 0;
 
-    video.addEventListener('timeupdate', () => {
-      if (video.currentTime > maxTime) {
-        maxTime = video.currentTime;
-      }
-    });
+      // ट्रैकिंग: यूज़र ने सबसे आगे कहाँ तक देखा है
+      video.addEventListener('timeupdate', () => {
+        if (video.currentTime > maxTime) {
+          maxTime = video.currentTime;
+        }
+      });
 
-    video.addEventListener('seeking', () => {
-      if (video.currentTime > maxTime) {
-        video.currentTime = maxTime;
-      }
+      // चेकिंग: अगर यूज़र ने सबसे आगे देखे गए हिस्से (maxTime) से आगे स्किप करने की कोशिश की तो उसे वापस maxTime पर भेज देगा
+      video.addEventListener('seeking', () => {
+        if (video.currentTime > maxTime) {
+          video.currentTime = maxTime;
+        }
+      });
     });
-  });
- </script>
+  </script>
 </head>
 <body>
   <div class="container">
