@@ -9,20 +9,15 @@ body {
 margin: 0;
 padding: 0;
 font-family: Arial, sans-serif;
-background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
-background-size: 400% 400%;
-animation: gradient 15s ease infinite;
+background-image: url('ebef427a893f6cfea0173ac3e1bf6f16.jpg');
+background-size: cover;
+background-position: center;
 display: flex;
 justify-content: center;
 align-items: center;
 min-height: 100vh;
 color: white;
 text-align: center;
-}
-@keyframes gradient {
-0% { background-position: 0% 50%; }
-50% { background-position: 100% 50%; }
-100% { background-position: 0% 50%; }
 }
 .container {
 background: rgba(0, 0, 0, 0.7);
@@ -53,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
 const video = document.getElementById('promoVideo');
 let lastTime = 0;
 video.addEventListener('timeupdate', () => {
-// यह लॉजिक वीडियो को आगे स्किप करने से रोकता है
 if (video.currentTime > lastTime + 1) {
 video.currentTime = lastTime;
 } else {
@@ -71,7 +65,7 @@ video.currentTime = lastTime;
 <body>
 <div class="container">
 <video id="promoVideo" controls controlsList="nodownload">
-<source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.ia.mp4" type="video/mp4">
+<source src="YOUR_ARCHIVE_ORG_VIDEO_LINK_HERE" type="video/mp4">
 आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
 </video>
 <h1>Let's unlock your 15k to Rs 5 lakh per month earnings.</h1>
@@ -79,3 +73,4 @@ video.currentTime = lastTime;
 </div>
 </body>
 </html>
+
