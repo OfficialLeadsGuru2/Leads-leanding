@@ -1,76 +1,41 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LeadsGuru Earning Potential</title>
-<style>
-body {
-margin: 0;
-padding: 0;
-font-family: Arial, sans-serif;
-background-image: url('ebef427a893f6cfea0173ac3e1bf6f16.jpg');
-background-size: cover;
-background-position: center;
-display: flex;
-justify-content: center;
-align-items: center;
-min-height: 100vh;
-color: white;
-text-align: center;
-}
-.container {
-background: rgba(0, 0, 0, 0.7);
-padding: 40px;
-border-radius: 20px;
-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-max-width: 600px;
-width: 90%;
-}
-video {
-width: 100%;
-border-radius: 15px;
-margin-bottom: 30px;
-outline: none;
-}
-h1 {
-font-size: 2rem;
-margin-bottom: 15px;
-line-height: 1.4;
-}
-p {
-font-size: 1.2rem;
-opacity: 0.9;
-}
-</style>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-const video = document.getElementById('promoVideo');
-let lastTime = 0;
-video.addEventListener('timeupdate', () => {
-if (video.currentTime > lastTime + 1) {
-video.currentTime = lastTime;
-} else {
-lastTime = video.currentTime;
-}
-});
-video.addEventListener('seeking', () => {
-if (video.currentTime > lastTime) {
-video.currentTime = lastTime;
-}
-});
-});
-</script>
+  <meta <title>LeadsGuru Earning Potential</title>
+ <style>
+    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-image: url('ebef427a893f6cfea45b736b76175e26'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: white; text-align: center; }
+    .container { background: rgba(0, 0, 0, 0.7); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); max-width: 600px; width: 90%; }
+    video { width: 100%; border-radius: 15px; margin-bottom: 30px; outline: none; }
+    h1 { font-size: 2rem; margin-bottom: 15px; line-height: 1.4; }
+    p { font-size: 1.2rem; opacity: 0.9; }
+ </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    const video = document.getElementById('promoVideo');
+    let maxTime = 0;
+
+    video.addEventListener('timeupdate', () => {
+      if (video.currentTime > maxTime) {
+        maxTime = video.currentTime;
+      }
+    });
+
+    video.addEventListener('seeking', () => {
+      if (video.currentTime > maxTime) {
+        video.currentTime = maxTime;
+      }
+    });
+  });
+ </script>
 </head>
 <body>
-<div class="container">
-<video id="promoVideo" controls controlsList="nodownload">
-<source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.ia.mp4" type="video/mp4">
-आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
-</video>
-<h1>Let's unlock your 15k to Rs 5 lakh per month earnings.</h1>
-<p>Let's start your work with Rahul Kushwaha</p>
-</div>
+  <div class="container">
+    <video id="promoVideo" controls controlsList="nodownload">
+      <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leadsGuru-2026-1080-P_HD%2929.ia.mp4" type="video/mp4">
+      आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
+    </video>
+    <h1>Let's unlock your 15k to Rs 5 lakh per month earnings.</h1>
+    <p>Let's start your work with Rahul Kushwaha</p>
+  </div>
 </body>
 </html>
-
