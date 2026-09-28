@@ -13,9 +13,7 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const video = document.getElementById('promoVideo');
-      let maxTime = 0;
-
-      // ट्रैकिंग: यूज़र ने सबसे आगे कहाँ तक देखा है
+      let maxTime = 0;// ट्रैकिंग: यूज़र ने सबसे आगे कहाँ तक देखा है
       video.addEventListener('timeupdate', () => {
         if (video.currentTime > maxTime) {
           maxTime = video.currentTime;
