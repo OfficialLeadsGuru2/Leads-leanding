@@ -1,58 +1,77 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LeadsGuru Earning Potential</title>
- <style>
-    body { margin: 0; padding: 0; font-family: Arial, sans-serif; background-image: url('ebef427a893f6cfea45b736b76175e26'); background-size: cover; background-position: center; display: flex; justify-content: center; align-items: center; min-height: 100vh; color: white; text-align: center; }
-    .container { background: rgba(0, 0, 0, 0.7); padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); max-width: 600px; width: 90%; }
-    video { width: 100%; border-radius: 15px; margin-bottom: 30px; outline: none; }
-    h1 { font-size: 2rem; margin-bottom: 15px; line-height: 1.4; }
-    p { font-size: 1.2rem; opacity: 0.9; }
- </style>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const video = document.getElementById('promoVideo');
-      let maxTime = 0;      // अब तक देखा गया सबसे आगे का समय
-      let lastTime = 0;     // पिछला सुरक्षित समय
-
-      video.addEventListener('timeupdate', () => {
-        // सिर्फ सामान्य प्ले के दौरान ही maxTime बढ़ाएँ (सीक के दौरान नहीं)
-        if (!video.seeking && video.currentTime - lastTime < 1.5) {
-          if (video.currentTime > maxTime) {
-            maxTime = video.currentTime;
-          }
-          lastTime = video.currentTime;
-        }
-      });
-
-      video.addEventListener('seeking', () => {
-        // आगे स्किप करने पर वापस देखे गए आखिरी बिंदु पर भेजें
-        if (video.currentTime > maxTime + 0.3) {
-          video.currentTime = maxTime;
-        }
-      });
-
-      video.addEventListener('seeked', () => {
-        lastTime = video.currentTime;
-      });
-
-      // स्पीड बढ़ाकर आगे भागने से रोकें
-      video.addEventListener('ratechange', () => {
-        if (video.playbackRate > 2) video.playbackRate = 1;
-      });
-    });
- </script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LeadsGuru Earning Potential</title>
+<style>
+  body {
+    margin: 0;
+    padding: 16px;
+    box-sizing: border-box;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, sans-serif;
+    background: url('ebef427a893f6cfea45b736b76175e26') center / cover no-repeat, linear-gradient(135deg, #1b2a49, #3a2c5f);
+  }
+  .frame {
+    width: 100%;
+    max-width: 900px;
+    padding: 10px;
+    border-radius: 18px;
+    background: rgba(10, 14, 30, 0.72);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  }
+  video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    background: #000;
+    outline: none;
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <video id="promoVideo" controls controlsList="nodownload">
-      <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leadsGuru-2026-1080-P_HD%2929.ia.mp4" type="video/mp4">
+  <div class="frame">
+    <video id="promoVideo" controls playsinline preload="metadata" controlsList="nodownload noplaybackrate" disablePictureInPicture>
+      <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.ia.mp4" type="video/mp4">
       आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
     </video>
-    <h1>Let's unlock your 15k to Rs 5 lakh per month earnings.</h1>
-    <p>Let's start your work with Rahul Kushwaha</p>
   </div>
+
+<script>
+  const video = document.getElementById('promoVideo');
+  let maxTime = 0;   // अब तक देखा गया सबसे आगे का समय
+  let lastTime = 0;  // पिछली बार का प्ले समय
+
+  // सामान्य प्ले के दौरान ही maxTime बढ़ाएँ
+  video.addEventListener('timeupdate', () => {
+    if (video.seeking) return;
+    if (video.currentTime - lastTime < 2.5) {
+      maxTime = Math.max(maxTime, video.currentTime);
+    }
+    lastTime = video.currentTime;
+  });
+
+  // देखे हुए हिस्से से आगे स्किप करने पर वापस वहीं भेज दें
+  video.addEventListener('seeking', () => {
+    if (video.currentTime > maxTime + 0.5) {
+      video.currentTime = maxTime;
+    }
+  });
+
+  video.addEventListener('seeked', () => {
+    lastTime = video.currentTime;
+  });
+
+  // 2x से तेज़ स्पीड करके आगे भागने से रोकें
+  video.addEventListener('ratechange', () => {
+    if (video.playbackRate > 2) video.playbackRate = 1;
+  });
+</script>
 </body>
 </html>
