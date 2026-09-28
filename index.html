@@ -1,131 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Skills Mastery</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f8fafc;
-            color: #1e293b;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-            background: #ffffff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-        }
-
-        .badge {
-            background-color: #dbeafe;
-            color: #1e40af;
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-
-        h1 {
-            font-size: 40px;
-            color: #0f172a;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-
-        p.subtitle {
-            font-size: 18px;
-            color: #64748b;
-            margin-bottom: 30px;
-        }
-
-        .video-wrapper {
-            position: relative;
-            margin: 0 auto 30px auto;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            max-width: 100%;
-        }
-
-        video {
-            width: 100%;
-            display: block;
-            background-color: #000;
-        }
-
-        .motivational-text {
-            font-size: 16px;
-            color: #475569;
-            font-style: italic;
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.5;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            h1 {
-                font-size: 32px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LeadsGuru Earning Potential</title>
+<style>
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+background-size: 400% 400%;
+animation: gradient 15s ease infinite;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+color: white;
+text-align: center;
+}
+@keyframes gradient {
+0% { background-position: 0% 50%; }
+50% { background-position: 100% 50%; }
+100% { background-position: 0% 50%; }
+}
+.container {
+background: rgba(0, 0, 0, 0.7);
+padding: 40px;
+border-radius: 20px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+max-width: 600px;
+width: 90%;
+}
+video {
+width: 100%;
+border-radius: 15px;
+margin-bottom: 30px;
+outline: none;
+}
+h1 {
+font-size: 2rem;
+margin-bottom: 15px;
+line-height: 1.4;
+}
+p {
+font-size: 1.2rem;
+opacity: 0.9;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+const video = document.getElementById('promoVideo');
+let lastTime = 0;
+video.addEventListener('timeupdate', () => {
+// यह लॉजिक वीडियो को आगे स्किप करने से रोकता है
+if (video.currentTime > lastTime + 1) {
+video.currentTime = lastTime;
+} else {
+lastTime = video.currentTime;
+}
+});
+video.addEventListener('seeking', () => {
+if (video.currentTime > lastTime) {
+video.currentTime = lastTime;
+}
+});
+});
+</script>
 </head>
 <body>
-
-    <div class="container">
-        <span class="badge">Success through knowledge</span>
-        <h1>Unlock Your Potential with Digital Skills</h1>
-        <p class="subtitle">Gain the high-paying skills demanded by the modern world.</p>
-
-        <div class="video-wrapper">
-            <video id="lockedVideo" controls>
-                <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.ia.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        </div>
-
-        <p class="motivational-text">"The limits of the future are defined by the skills you build today. Invest in yourself, create your opportunity."</p>
-    </div>
-
-    <script>
-        const video = document.getElementById('lockedVideo');
-        let highestTime = 0;
-
-        video.addEventListener('timeupdate', () => {
-            if (video.currentTime > highestTime) {
-                highestTime = video.currentTime;
-            }
-        });
-
-        video.addEventListener('seeking', () => {
-            if (video.currentTime > highestTime) {
-                video.currentTime = highestTime;
-            }
-        });
-    </script>
-
+<div class="container">
+<video id="promoVideo" controls controlsList="nodownload">
+<source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.ia.mp4" type="video/mp4">
+आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
+</video>
+<h1>Let's unlock your 15k to Rs 5 lakh per month earnings.</h1>
+<p>Let's start your work with Rahul Kushwaha</p>
+</div>
 </body>
 </html>
