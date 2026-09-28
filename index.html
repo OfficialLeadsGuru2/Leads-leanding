@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Course Page</title>
+    <title>Inspirational Video Page</title>
     <style>
         body {
             margin: 0;
@@ -13,10 +13,10 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+            background: linear-gradient(45deg, #ff007f, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
             background-size: 400% 400%;
             animation: rainbow 15s ease infinite;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Poppins', sans-serif;
             color: #ffffff;
             text-align: center;
         }
@@ -28,64 +28,61 @@
         }
 
         .container {
-            width: 80%;
-            max-width: 800px;
-            background: rgba(0, 0, 0, 0.5);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            width: 85%;
+            max-width: 750px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
         }
 
         video {
             width: 100%;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+            margin-bottom: 25px;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-weight: 700;
+            text-shadow: 2px 4px 6px rgba(0, 0, 0, 0.4);
         }
 
         p {
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            text-shadow: 1px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+
+        .quote {
+            font-style: italic;
+            color: #e0e0e0;
+            font-size: 1.1rem;
+            margin-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding-top: 15px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- वीडियो का लिंक यहाँ डालें -->
-        <video id="myVideo" controls controlsList="nodownload">
+        <video id="myVideo" controls>
             <source src="YOUR_VIDEO_URL_HERE.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
 
-        <h1>Leeds Guru</h1>
-        <p>Let's start your high paying skills</p>
-        <p>Let's start work with us</p>
+        <h1>Learn high paying skills</h1>
+        <p>Let's start your work with us</p>
+        
+        <div class="quote">
+            "Your limitation—it's only your imagination. Push harder than yesterday if you want a different tomorrow."
+        </div>
     </div>
-
-    <script>
-        const video = document.getElementById('myVideo');
-        let lastPlayedTime = 0;
-
-        video.addEventListener('timeupdate', () => {
-            if (!video.seeking) {
-                lastPlayedTime = video.currentTime;
-            }
-        });
-
-        video.addEventListener('seeking', () => {
-            if (video.currentTime > lastPlayedTime) {
-                video.currentTime = lastPlayedTime;
-            }
-        });
-    </script>
 
 </body>
 </html>
