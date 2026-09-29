@@ -73,29 +73,5 @@
     if (video.playbackRate > 2) video.playbackRate = 1;
   });
 </script>
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i71Mk6TOMFGxU",
-    authDomain: "leadsguru-942de.firebaseapp.com",
-    projectId: "leadsguru-942de",
-    storageBucket: "leadsguru-942de.firebasestorage.app",
-    messagingSenderId: "712411117397",
-    appId: "1:712411117397:web:000ae6fd55e77dd4d7e1dc",
-    measurementId: "G-V244ZMV4G7"
-  };
-
-  // Initialize Firebase
-  const db = firebase.database(); const video = document.getElementById('promoVideo'); video.addEventListener('timeupdate', () => { db.ref('video_progress').update({ last_watched_time: video.currentTime, completion_status: 'in_progress' }); }); video.addEventListener('ended', () => { db.ref('video_progress').update({ completion_status: 'completed' }); });
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 </body>
 </html>
