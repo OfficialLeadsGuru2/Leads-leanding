@@ -39,7 +39,7 @@
 </head>
 <body>
     <div class="frame">
-        —<video id="promoVideo" playsinline preload="metadata" oncontextmenu="return false;" autoplay muted">
+        <video id="promoVideo" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata" oncontextmenu="return false;" autoplay muted>
             <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd_202609/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.mp4" type="video/mp4">
             आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
         </video>
@@ -47,40 +47,77 @@
 
     <script>
         const firebaseConfig = {
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i71Mk6TOMFGxU",
-  authDomain: "leadsguru-942de.firebaseapp.com",
-  databaseURL: "https://leadsguru-942de-default-rtdb.firebaseio.com",
-  projectId: "leadsguru-942de",
-  storageBucket: "leadsguru-942de.firebasestorage.app",
-  messagingSenderId: "712411117397",
-  appId: "1:712411117397:web:000ae6fd55e77dd4d7e1dc",
-  measurementId: "G-V244ZMV4G7"
-};
-        
+            apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i71Mk6TOMFGxU",
+            authDomain: "leadsguru-942de.firebaseapp.com",
+            databaseURL: "https://leadsguru-942de-default-rtdb.firebaseio.com",
+            projectId: "leadsguru-942de",
+            storageBucket: "leadsguru-942de.firebasestorage.app",
+            messagingSenderId: "712411117397",
+            appId: "1:712411117397:web:000ae6fd55e77dd4d7e1dc",
+            measurementId: "G-V244ZMV4G7"
+        };
+
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
         const videoId = "video1";
 
         const urlParams = new URLSearchParams(window.location.search);
-        const userName = urlParams.get('user') || 'Anonymous';
+        // Firebase keys me . # $ [ ] / allowed nahi hote, isliye saaf kar rahe hain
+        const userName = (urlParams.get('user') || 'Anonymous').replace(/[.#$\[\]\/]/g, '_');
 
         const video = document.getElementById('promoVideo');
-        let maxtime = 0; 
-        let lastTime = 0; 
+        const dbRef = database.ref('users/' + userName + '/videos/' + videoId);
 
+        let maxtime = 0;      // ab tak sabse aage dekha gaya point
+        let lastTime = 0;
+        let lastSent = 0;
+        let loaded = false;   // Firebase se purana progress aa gaya?
+        let metaReady = false;
+
+        /* ---------- Purana progress load karo (refresh par reset na ho) ---------- */
+        function applyResume() {
+            if (loaded && metaReady && maxtime > 2 && maxtime < video.duration - 1) {
+                video.currentTime = maxtime;
+                lastTime = maxtime;
+            }
+        }
+        function onLoaded() { loaded = true; applyResume(); }
+
+        dbRef.once('value').then(snap => {
+            const v = snap.val();
+            if (v && typeof v.furthestWatched === 'number') {
+                maxtime = Math.max(maxtime, v.furthestWatched);
+            }
+            onLoaded();
+        }).catch(onLoaded);
+
+        video.addEventListener('loadedmetadata', () => { metaReady = true; applyResume(); });
+
+        /* ---------- Firebase me data bhejna ---------- */
+        function save(extra) {
+            if (!loaded) return;
+            dbRef.update(Object.assign({
+                furthestWatched: Math.round(maxtime * 10) / 10,
+                duration: Math.round(video.duration || 0),
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
+            }, extra || {}));
+        }
+
+        /* ---------- Dekhte waqt progress track karo ---------- */
         video.addEventListener('timeupdate', () => {
             if (video.seeking) return;
             if (video.currentTime - lastTime < 2) {
                 maxtime = Math.max(maxtime, video.currentTime);
-                database.ref('users/' + userName + '/videos/' + videoId).update({
-                    furthestWatched: maxtime
-                });
+                // har 3 second me ek baar Firebase me likho
+                if (Date.now() - lastSent > 3000) {
+                    lastSent = Date.now();
+                    save();
+                }
             }
             lastTime = video.currentTime;
         });
 
+        /* ---------- Aage skip block, peeche skip allowed ---------- */
         video.addEventListener('seeking', () => {
             if (video.currentTime > maxtime + 0.5) {
                 video.currentTime = maxtime;
@@ -91,9 +128,21 @@ const firebaseConfig = {
             lastTime = video.currentTime;
         });
 
+        /* ---------- Speed badhane par rok ---------- */
         video.addEventListener('ratechange', () => {
             if (video.playbackRate > 2) video.playbackRate = 1;
         });
+
+        /* ---------- Pause, end, tab band hone par bhi save ---------- */
+        video.addEventListener('pause', () => save());
+        video.addEventListener('ended', () => {
+            maxtime = Math.max(maxtime, video.duration || 0);
+            save({ completed: true });
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') save();
+        });
+        window.addEventListener('pagehide', () => save());
     </script>
 </body>
 </html>
