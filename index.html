@@ -93,6 +93,7 @@
   };
 
   // Initialize Firebase
+  const db = firebase.database(); const video = document.getElementById('promoVideo'); video.addEventListener('timeupdate', () => { db.ref('video_progress').update({ last_watched_time: video.currentTime, completion_status: 'in_progress' }); }); video.addEventListener('ended', () => { db.ref('video_progress').update({ completion_status: 'completed' }); });
   const app = initializeApp(firebaseConfig);
   const analytics = getAnalytics(app);
 </script>
