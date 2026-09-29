@@ -55,6 +55,7 @@
       maxTime = Math.max(maxTime, video.currentTime);
     }
     lastTime = video.currentTime;
+    db.ref('video_progress').update({ last_watched_time: video.currentTime, completion_status: 'in_progress' });
   });
 
   // देखे हुए हिस्से से आगे स्किप करने पर वापस वहीं भेज दें
