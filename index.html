@@ -55,7 +55,6 @@
       maxTime = Math.max(maxTime, video.currentTime);
     }
     lastTime = video.currentTime;
-    db.ref('video_progress').update({ last_watched_time: video.currentTime, completion_status: 'in_progress' });
   });
 
   // देखे हुए हिस्से से आगे स्किप करने पर वापस वहीं भेज दें
@@ -79,7 +78,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
   // TODO: Add SDKs for Firebase products that you want to use
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
   // https://firebase.google.com/docs/web/setup#available-libraries
 
   // Your web app's Firebase configuration
@@ -95,8 +93,8 @@
   };
 
   // Initialize Firebase
+  const db = firebase.database(); const video = document.getElementById('promoVideo'); video.addEventListener('timeupdate', () => { db.ref('video_progress').update({ last_watched_time: video.currentTime, completion_status: 'in_progress' }); }); video.addEventListener('ended', () => { db.ref('video_progress').update({ completion_status: 'completed' }); });
   const app = initializeApp(firebaseConfig);
-  const db = getDatabase(app);
   const analytics = getAnalytics(app);
 </script>
 </body>
