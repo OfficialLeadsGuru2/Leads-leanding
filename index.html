@@ -97,7 +97,7 @@
         function save(extra) {
             if (!loaded) return;
             dbRef.update(Object.assign({
-                furthestWatched: Math.round(maxtime * 10) / 10,
+                furthest: Math.round(maxtime * 10) / 10,
                 duration: Math.round(video.duration || 0),
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
             }, extra || {}));
