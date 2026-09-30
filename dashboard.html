@@ -1,97 +1,221 @@
-```html<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Watch Time Dashboard</title>
+<title>LeadsGuru | Watch Time Dashboard</title>
 <style>
-body {
-font-family: Arial, sans-serif;
-margin: 20px;
-background-color: #000000;
-color: #ff9900;
+:root{
+  --bg:#05070a; --panel:#0c1016; --panel2:#10151c; --line:#1b222c;
+  --txt:#e8ecf1; --mut:#8793a3; --acc:#ff9900; --ok:#34d399; --warn:#f5b041;
 }
-​h2 {
-color: #ff9900;
-text-align: center;
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{
+  margin:0; min-height:100vh; color:var(--txt);
+  font-family:"Inter","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  background:radial-gradient(1000px 500px at 85% -10%,#15100a 0%,transparent 60%),var(--bg);
 }
-​.summary-box {
-background-color: #1a1a1a;
-padding: 15px;
-border-radius: 5px;
-margin-bottom: 20px;
-font-weight: bold;
-border: 1px solid #333;
+.top{
+  position:sticky; top:0; z-index:5; background:rgba(5,7,10,.88);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--line);
 }
-​table {
-width: 100%;
-border-collapse: collapse;
-background-color: #1a1a1a;
-border: 1px solid #333;
+.top-in{max-width:1100px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:12px}
+.logo{width:34px; height:34px; border-radius:9px; background:var(--acc); color:#000; font-weight:800; display:grid; place-items:center}
+.brand h1{margin:0; font-size:1.1rem; font-weight:650; letter-spacing:.2px}
+.brand small{display:block; color:var(--mut); font-size:.78rem; margin-top:2px}
+.pill{display:flex; align-items:center; gap:8px; font-size:.82rem; color:var(--mut); border:1px solid var(--line); border-radius:999px; padding:6px 12px; background:var(--panel)}
+.dot{width:8px; height:8px; border-radius:50%; background:var(--mut)}
+.pill.ok .dot{background:var(--ok); box-shadow:0 0 0 3px rgba(52,211,153,.15)}
+.pill.err .dot{background:#ef4444}
+main{max-width:1100px; margin:0 auto; padding:24px 20px 48px}
+.stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px; margin-bottom:24px}
+.stat{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px; border-top:2px solid var(--acc)}
+.stat span{color:var(--mut); font-size:.88rem}
+.stat b{display:block; margin-top:8px; font-size:2.1rem; font-weight:700; line-height:1; font-variant-numeric:tabular-nums}
+.stat em{display:block; margin-top:8px; font-style:normal; color:var(--mut); font-size:.78rem}
+.card{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden}
+.tools{display:flex; gap:10px; padding:14px; border-bottom:1px solid var(--line); flex-wrap:wrap}
+input,select,button{
+  background:var(--panel2); color:var(--txt); border:1px solid var(--line);
+  border-radius:8px; padding:10px 12px; font:inherit; font-size:.92rem;
 }
-​th, td {
-padding: 12px;
-border: 1px solid #333;
-text-align: left;
-color: #ff9900;
-}
-​th {
-background-color: #262626;
-color: #ff9900;
-}
+input{flex:1; min-width:180px}
+button{cursor:pointer}
+button:hover,select:hover{border-color:#2c3745}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--acc); outline-offset:1px}
+.scroll{overflow-x:auto}
+table{width:100%; border-collapse:collapse; min-width:720px}
+th,td{padding:14px 16px; text-align:left; border-bottom:1px solid var(--line)}
+th{color:var(--mut); font-size:.82rem; font-weight:600; background:var(--panel2)}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:#0f141b}
+.name{display:flex; align-items:center; gap:10px; font-weight:600}
+.av{width:30px; height:30px; border-radius:50%; background:#1c2430; color:var(--acc); display:grid; place-items:center; font-size:.8rem; font-weight:700; flex:none}
+.num{font-variant-numeric:tabular-nums}
+.sub{color:var(--mut); font-size:.78rem; margin-top:2px}
+.prog{display:flex; align-items:center; gap:10px; min-width:170px}
+.bar{flex:1; height:6px; background:#1a212b; border-radius:3px; overflow:hidden}
+.bar i{display:block; height:100%; background:var(--acc); border-radius:3px}
+.bar i.done{background:var(--ok)}
+.pct{width:40px; text-align:right; font-variant-numeric:tabular-nums; font-size:.88rem}
+.badge{display:inline-block; padding:4px 10px; border-radius:6px; font-size:.78rem; font-weight:600; white-space:nowrap}
+.b-done{background:rgba(52,211,153,.12); color:var(--ok)}
+.b-mid{background:rgba(245,176,65,.12); color:var(--warn)}
+.b-new{background:#182029; color:var(--mut)}
+.msg{padding:40px 16px; text-align:center; color:var(--mut)}
+.foot{margin-top:14px; color:var(--mut); font-size:.8rem}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .4s ease}}
 </style>
 </head>
 <body>
-​<h2>User Watch Time Dashboard</h2>
-​<div class="summary-box">
-Total Video Completions: <span id="total-completions">0</span>
-</div>
-​<table>
-<thead>
-<tr>
-<th>User Name</th>
-<th>Furthest Watched Point (s)</th>
-<th>Last Updated</th>
-</tr>
-</thead>
-<tbody id="user-table-body">
-<!-- Data will be inserted here -->
-</tbody>
-</table>
-​<script type="module">
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <div class="logo">L</div>
+      <div><h1>Watch Time Dashboard</h1><small>LeadsGuru video performance</small></div>
+    </div>
+    <div class="pill" id="pill"><span class="dot"></span><span id="status">Connecting…</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="stats">
+    <div class="stat"><span>Total viewers</span><b id="s-users">0</b><em>Unique users tracked</em></div>
+    <div class="stat"><span>Completions</span><b id="s-done">0</b><em id="s-done-sub">Watched the full video</em></div>
+    <div class="stat"><span>Completion rate</span><b id="s-rate">0%</b><em>Completions out of all viewers</em></div>
+    <div class="stat"><span>Average watched</span><b id="s-avg">0:00</b><em id="s-avg-sub">of 11:19 total</em></div>
+  </section>
+
+  <section class="card">
+    <div class="tools">
+      <input id="q" type="search" placeholder="Search by user name" aria-label="Search by user name">
+      <select id="sort" aria-label="Sort by">
+        <option value="recent">Latest activity</option>
+        <option value="watched">Most watched</option>
+        <option value="name">Name A–Z</option>
+      </select>
+      <select id="filter" aria-label="Filter by status">
+        <option value="all">All statuses</option>
+        <option value="done">Completed</option>
+        <option value="mid">Watching</option>
+        <option value="new">Not started</option>
+      </select>
+      <button id="csv" type="button">Download CSV</button>
+    </div>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>User</th><th>Furthest watched</th><th>Progress</th><th>Status</th><th>Last updated</th></tr></thead>
+        <tbody id="body"><tr><td colspan="5" class="msg">Loading data…</td></tr></tbody>
+      </table>
+    </div>
+  </section>
+  <p class="foot" id="foot"></p>
+</main>
+
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
 import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js";
-​const firebaseConfig = {
-apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i7w9eZ-yG1o",
-authDomain: "leadsguru-942de.firebaseapp.com",
-databaseURL: "https://leadsguru-942de-default-rtdb.firebaseio.com",
-projectId: "leadsguru-942de",
-storageBucket: "leadsguru-942de.appspot.com",
-messagingSenderId: "712411117397",
-appId: "1:712411117397:web:000ae6fd55e7dd4d7e1dc",
-measurementId: "G-V244ZMV4G7"
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i7w9eZ-yG1o",
+  authDomain: "leadsguru-942de.firebaseapp.com",
+  databaseURL: "https://leadsguru-942de-default-rtdb.firebaseio.com",
+  projectId: "leadsguru-942de",
+  storageBucket: "leadsguru-942de.appspot.com",
+  messagingSenderId: "712411117397",
+  appId: "1:712411117397:web:000ae6fd55e7dd4d7e1dc",
+  measurementId: "G-V244ZMV4G7"
 };
-​const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const usersRef = ref(db, 'users');
-​onValue(usersRef, (snapshot) => {
-const data = snapshot.val();
-const tableBody = document.getElementById('user-table-body');
-const totalCompletionsEl = document.getElementById('total-completions');
-​tableBody.innerHTML = '';
-let completedCount = 0;
-​for (const userId in data) {
-const user = data[userId];
-const row = document.createElement('tr');
-​const furthestWatched = user.watchData ? user.watchData.furthestWatchedPoint : 'N/A';
-const lastUpdated = user.watchData ? new Date(user.watchData.lastTimestamp).toLocaleString() : 'N/A';
-​if (user.watchData && user.watchData.furthestWatchedPoint >= 679) {
-completedCount++;
+
+const VIDEO_LENGTH = 679; // seconds; reaching this counts as a completion
+const $ = id => document.getElementById(id);
+let rows = [], view = [];
+
+const mmss = s => { s = Math.max(0, Math.floor(s)); return Math.floor(s/60) + ":" + String(s%60).padStart(2,"0"); };
+const ago = ts => {
+  const d = (Date.now() - ts) / 1000;
+  if (d < 60) return "Just now";
+  if (d < 3600) return Math.floor(d/60) + " min ago";
+  if (d < 86400) return Math.floor(d/3600) + " hr ago";
+  return Math.floor(d/86400) + " day ago";
+};
+const state = r => r.watched >= VIDEO_LENGTH ? "done" : r.watched > 0 ? "mid" : "new";
+const LABEL = { done:"Completed", mid:"Watching", new:"Not started" };
+
+function parse(data){
+  return Object.entries(data || {}).map(([name,u]) => {
+    const w = u.watchData || {}, v = (u.videos && u.videos.video1) || {};
+    return {
+      name,
+      watched: Number(w.furthestWatchedPoint ?? v.furthestWatched ?? 0) || 0,
+      ts: Number(w.lastTimestamp ?? v.lastTimestamp ?? v.lastUpdated ?? 0) || 0
+    };
+  });
 }
-​row.innerHTML = <td>${userId}</td> <td>${furthestWatched}</td> <td>${lastUpdated}</td>;
-tableBody.appendChild(row);
+
+function render(){
+  const q = $("q").value.trim().toLowerCase(), sort = $("sort").value, f = $("filter").value;
+  view = rows.filter(r => r.name.toLowerCase().includes(q) && (f === "all" || state(r) === f));
+  view.sort((a,b) => sort === "name" ? a.name.localeCompare(b.name) : sort === "watched" ? b.watched - a.watched : b.ts - a.ts);
+
+  const body = $("body");
+  body.innerHTML = "";
+  $("foot").textContent = rows.length ? "Showing " + view.length + " of " + rows.length + " viewers" : "";
+  if (!view.length){
+    body.innerHTML = '<tr><td colspan="5" class="msg">' + (rows.length ? "No viewers match these filters." : "No viewers yet. Data appears here once someone starts watching.") + "</td></tr>";
+    return;
+  }
+  for (const r of view){
+    const pct = Math.min(100, Math.round(r.watched / VIDEO_LENGTH * 100)), s = state(r);
+    const tr = document.createElement("tr");
+    tr.innerHTML =
+      '<td><div class="name"><span class="av"></span><span class="nm"></span></div></td>' +
+      '<td class="num">' + mmss(r.watched) + '<div class="sub">' + Math.floor(r.watched) + ' seconds</div></td>' +
+      '<td><div class="prog"><div class="bar"><i class="' + (s === "done" ? "done" : "") + '" style="width:' + pct + '%"></i></div><span class="pct">' + pct + '%</span></div></td>' +
+      '<td><span class="badge b-' + s + '">' + LABEL[s] + '</span></td>' +
+      '<td class="num">' + (r.ts ? new Date(r.ts).toLocaleString() + '<div class="sub">' + ago(r.ts) + '</div>' : 'N/A') + '</td>';
+    tr.querySelector(".nm").textContent = r.name;
+    tr.querySelector(".av").textContent = (r.name[0] || "?").toUpperCase();
+    body.appendChild(tr);
+  }
 }
-totalCompletionsEl.textContent = completedCount;
+
+function stats(){
+  const n = rows.length, done = rows.filter(r => r.watched >= VIDEO_LENGTH).length;
+  const avg = n ? rows.reduce((s,r) => s + r.watched, 0) / n : 0;
+  $("s-users").textContent = n;
+  $("s-done").textContent = done;
+  $("s-rate").textContent = (n ? Math.round(done / n * 100) : 0) + "%";
+  $("s-avg").textContent = mmss(avg);
+  $("s-avg-sub").textContent = "of " + mmss(VIDEO_LENGTH) + " total";
+}
+
+$("csv").addEventListener("click", () => {
+  const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const lines = [["User","Furthest watched (s)","Progress %","Status","Last updated"].join(",")];
+  for (const r of view) lines.push([esc(r.name), Math.floor(r.watched), Math.min(100, Math.round(r.watched / VIDEO_LENGTH * 100)), LABEL[state(r)], esc(r.ts ? new Date(r.ts).toLocaleString() : "")].join(","));
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" }));
+  a.download = "watch-time.csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+["q","sort","filter"].forEach(id => $(id).addEventListener("input", render));
+
+const db = getDatabase(initializeApp(firebaseConfig));
+onValue(ref(db, "users"), snap => {
+  rows = parse(snap.val());
+  stats(); render();
+  $("pill").className = "pill ok";
+  $("status").textContent = "Live · " + new Date().toLocaleTimeString();
+}, err => {
+  $("pill").className = "pill err";
+  $("status").textContent = "Connection error";
+  $("body").innerHTML = '<tr><td colspan="5" class="msg">Could not load data. Check your internet connection or the Firebase database rules.</td></tr>';
+  console.error(err);
 });
 </script>
 </body>
