@@ -39,7 +39,7 @@
 </head>
 <body>
     <div class="frame">
-        <video id="promoVideo" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata" oncontextmenu="return false;" >
+        <video id="promoVideo" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata" oncontextmenu="return false;">
             <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd_202609/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.mp4" type="video/mp4">
             आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
         </video>
@@ -62,26 +62,30 @@
         const videoId = "video1";
 
         const urlParams = new URLSearchParams(window.location.search);
-        // Firebase keys me . # $ [ ] / allowed nahi hote, isliye saaf kar rahe hain
+        // Firebase keys me . # $ [ ] / allowed nahi hote
         const userName = (urlParams.get('user') || 'Anonymous').replace(/[.#$\[\]\/]/g, '_');
 
         const video = document.getElementById('promoVideo');
         const dbRef = database.ref('users/' + userName + '/videos/' + videoId);
 
-        let maxtime = 0;      // ab tak sabse aage dekha gaya point
+        let maxtime = 0;       // ab tak sabse aage dekha gaya point
         let lastTime = 0;
         let lastSent = 0;
-        let loaded = false;   // Firebase se purana progress aa gaya?
+        let loaded = false;    // purana progress aa gaya (ya timeout ho gaya)
         let metaReady = false;
 
-        /* ---------- Purana progress load karo (refresh par reset na ho) ---------- */
+        /* ---------- Purana progress load karo ---------- */
         function applyResume() {
             if (loaded && metaReady && maxtime > 2 && maxtime < video.duration - 1) {
                 video.currentTime = maxtime;
                 lastTime = maxtime;
             }
         }
-        function onLoaded() { loaded = true; applyResume(); }
+        function onLoaded() {
+            if (loaded) return;
+            loaded = true;
+            applyResume();
+        }
 
         dbRef.once('value').then(snap => {
             const v = snap.val();
@@ -89,7 +93,13 @@
                 maxtime = Math.max(maxtime, v.furthestWatched);
             }
             onLoaded();
-        }).catch(onLoaded);
+        }).catch(err => {
+            console.error('Firebase read error:', err);
+            onLoaded();
+        });
+
+        // Agar Firebase 4 second me jawab na de, tab bhi saving chalu ho jaye
+        setTimeout(onLoaded, 4000);
 
         video.addEventListener('loadedmetadata', () => { metaReady = true; applyResume(); });
 
@@ -97,10 +107,12 @@
         function save(extra) {
             if (!loaded) return;
             dbRef.update(Object.assign({
-                furthest: Math.round(maxtime * 10) / 10,
+                furthestWatched: Math.round(maxtime * 10) / 10,
                 duration: Math.round(video.duration || 0),
                 updatedAt: firebase.database.ServerValue.TIMESTAMP
-            }, extra || {}));
+            }, extra || {})).catch(err => {
+                console.error('Firebase write error:', err);
+            });
         }
 
         /* ---------- Dekhte waqt progress track karo ---------- */
@@ -133,7 +145,8 @@
             if (video.playbackRate > 2) video.playbackRate = 1;
         });
 
-        /* ---------- Pause, end, tab band hone par bhi save ---------- */
+        /* ---------- Play, pause, end, tab band hone par save ---------- */
+        video.addEventListener('play', () => save());
         video.addEventListener('pause', () => save());
         video.addEventListener('ended', () => {
             maxtime = Math.max(maxtime, video.duration || 0);
