@@ -1,27 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="hi">
 <head>
-<title>Protected Video Player</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadsGuru Earning Potential</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            background: url('https://raw.githubusercontent.com/OfficialLeadsGuru2/Leads-leanding/refs/heads/main/ebef427a893f6cfea0173ac3e1bf6f16.jpg') no-repeat center center/cover;
+        }
+        .frame {
+            width: 100%;
+            max-width: 900px;
+            padding: 10px;
+            border-radius: 18px;
+            background: rgba(10, 14, 30, 0.72);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+        }
+        video {
+            display: block;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 12px;
+            background: #000;
+            outline: none;
+        }
+    </style>
 </head>
 <body>
+    <div class="frame">
+        <video id="promoVideo" controls controlsList="nodownload noplaybackrate" disablePictureInPicture playsinline preload="metadata" oncontextmenu="return false;" >
+            <source src="https://archive.org/download/without-bronze-unlock-your-earning-potential-with-digital-skills-leads-guru-2026-1080-p-hd_202609/Without%20Bronze%20__%20Unlock%20Your%20Earning%20Potential%20with%20Digital%20Skills%20__%20LeadsGuru%202026%281080P_HD%29.mp4" type="video/mp4">
+            आपका ब्राउज़र वीडियो टैग का समर्थन नहीं करता है।
+        </video>
+    </div>
 
-<video id="myVideo" width="640" height="390" controls>
-  <source src="https://drive.google.com/uc?export=view&id=1cBKeszOa8y4haksVxofbU_pBH5jK9iMs" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDQ5_Dm4QL5L1neubND79i71Mk6TOMFGxU",
+            authDomain: "leadsguru-942de.firebaseapp.com",
+            databaseURL: "https://leadsguru-942de-default-rtdb.firebaseio.com",
+            projectId: "leadsguru-942de",
+            storageBucket: "leadsguru-942de.firebasestorage.app",
+            messagingSenderId: "712411117397",
+            appId: "1:712411117397:web:000ae6fd55e77dd4d7e1dc",
+            measurementId: "G-V244ZMV4G7"
+        };
 
-<script>
-var video = document.getElementById('myVideo');
-var maxTime = 0;
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const videoId = "video1";
 
-video.addEventListener('timeupdate', function() {
-  if (video.currentTime > maxTime + 1) {
-    video.currentTime = maxTime;
-  } else if (video.currentTime > maxTime) {
-    maxTime = video.currentTime;
-  }
-});
-</script>
+        const urlParams = new URLSearchParams(window.location.search);
+        // Firebase keys me . # $ [ ] / allowed nahi hote, isliye saaf kar rahe hain
+        const userName = (urlParams.get('user') || 'Anonymous').replace(/[.#$\[\]\/]/g, '_');
 
+        const video = document.getElementById('promoVideo');
+        const dbRef = database.ref('users/' + userName + '/videos/' + videoId);
+
+        let maxtime = 0;      // ab tak sabse aage dekha gaya point
+        let lastTime = 0;
+        let lastSent = 0;
+        let loaded = false;   // Firebase se purana progress aa gaya?
+        let metaReady = false;
+
+        /* ---------- Purana progress load karo (refresh par reset na ho) ---------- */
+        function applyResume() {
+            if (loaded && metaReady && maxtime > 2 && maxtime < video.duration - 1) {
+                video.currentTime = maxtime;
+                lastTime = maxtime;
+            }
+        }
+        function onLoaded() { loaded = true; applyResume(); }
+
+        dbRef.once('value').then(snap => {
+            const v = snap.val();
+            if (v && typeof v.furthestWatched === 'number') {
+                maxtime = Math.max(maxtime, v.furthestWatched);
+            }
+            onLoaded();
+        }).catch(onLoaded);
+
+        video.addEventListener('loadedmetadata', () => { metaReady = true; applyResume(); });
+
+        /* ---------- Firebase me data bhejna ---------- */
+        function save(extra) {
+            if (!loaded) return;
+            dbRef.update(Object.assign({
+                furthest: Math.round(maxtime * 10) / 10,
+                duration: Math.round(video.duration || 0),
+                updatedAt: firebase.database.ServerValue.TIMESTAMP
+            }, extra || {}));
+        }
+
+        /* ---------- Dekhte waqt progress track karo ---------- */
+        video.addEventListener('timeupdate', () => {
+            if (video.seeking) return;
+            if (video.currentTime - lastTime < 2) {
+                maxtime = Math.max(maxtime, video.currentTime);
+                // har 3 second me ek baar Firebase me likho
+                if (Date.now() - lastSent > 3000) {
+                    lastSent = Date.now();
+                    save();
+                }
+            }
+            lastTime = video.currentTime;
+        });
+
+        /* ---------- Aage skip block, peeche skip allowed ---------- */
+        video.addEventListener('seeking', () => {
+            if (video.currentTime > maxtime + 0.5) {
+                video.currentTime = maxtime;
+            }
+        });
+
+        video.addEventListener('seeked', () => {
+            lastTime = video.currentTime;
+        });
+
+        /* ---------- Speed badhane par rok ---------- */
+        video.addEventListener('ratechange', () => {
+            if (video.playbackRate > 2) video.playbackRate = 1;
+        });
+
+        /* ---------- Pause, end, tab band hone par bhi save ---------- */
+        video.addEventListener('pause', () => save());
+        video.addEventListener('ended', () => {
+            maxtime = Math.max(maxtime, video.duration || 0);
+            save({ completed: true });
+        });
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') save();
+        });
+        window.addEventListener('pagehide', () => save());
+    </script>
 </body>
 </html>
